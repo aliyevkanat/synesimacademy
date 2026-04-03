@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 100% 96%;
+    --foreground: 220 40% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 40% 20%;
+
+    --primary: 150 60% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 35 95% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 45 30% 90%;
+    --muted-foreground: 220 15% 50%;
+
+    --accent: 200 85% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 45 30% 85%;
+    --input: 45 30% 85%;
+    --ring: 150 60% 45%;
+
+    --radius: 1rem;
+
+    --house-big: 35 95% 60%;
+    --house-small: 200 85% 55%;
+    --sky: 200 80% 85%;
+    --grass: 130 50% 65%;
+    --success: 150 70% 45%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 30% 12%;
+    --foreground: 45 30% 95%;
+    --card: 220 30% 16%;
+    --card-foreground: 45 30% 95%;
+    --popover: 220 30% 16%;
+    --popover-foreground: 45 30% 95%;
+    --primary: 150 60% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 35 95% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 20% 20%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 200 85% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 150 60% 45%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-nunito;
+  }
+}
+
+@layer utilities {
+  .game-title {
+    @apply text-4xl md:text-6xl font-black tracking-tight;
+    text-shadow: 3px 3px 0px hsl(var(--secondary) / 0.4);
+  }
+
+  .house-shadow {
+    filter: drop-shadow(0 8px 16px hsl(var(--foreground) / 0.15));
+  }
+
+  .animal-draggable {
+    @apply cursor-grab active:cursor-grabbing;
+    filter: drop-shadow(0 4px 8px hsl(var(--foreground) / 0.2));
+  }
+
+  .drop-zone-glow {
+    box-shadow: 0 0 20px 4px hsl(var(--primary) / 0.4);
+  }
+}
