@@ -34,9 +34,6 @@ import G2Weight from "./screens/games/cat2/G2Weight";
 import G3Taste from "./screens/games/cat3/G3Taste";
 import G3Smell from "./screens/games/cat3/G3Smell";
 
-import G4Volume from "./screens/games/cat4/G4Volume";
-import G4Pitch from "./screens/games/cat4/G4Pitch";
-
 const cat1Games = [
   { id: "g1_color_mode" as Screen, label: "Түстер", emoji: "🌈" },
   { id: "g1_size_mode" as Screen, label: "Үлкен және Кіші", emoji: "🐻" },
@@ -53,11 +50,6 @@ const cat2Games = [
 const cat3Games = [
   { id: "g3_taste" as Screen, label: "Тәтті және Ащы", emoji: "🍬" },
   { id: "g3_smell" as Screen, label: "Хош және Жағымсыз иіс", emoji: "🌸" },
-];
-
-const cat4Games = [
-  { id: "g4_volume" as Screen, label: "Қатты және Ақырын", emoji: "🔊" },
-  { id: "g4_pitch" as Screen, label: "Жуан және Жіңішке дауыс", emoji: "🎵" },
 ];
 
 export default function App() {
@@ -203,16 +195,6 @@ export default function App() {
             onHome={home}
           />
         )}
-        {screen === "cat4" && (
-          <CategoryMenu
-            key="cat4"
-            title="🎵 Дыбыстар әлемі"
-            color="#6d28d9"
-            games={cat4Games}
-            onSelect={go}
-            onHome={home}
-          />
-        )}
 
         {screen === "g1_color_mode" && (
           <G1ColorMode
@@ -353,8 +335,6 @@ export default function App() {
         {screen === "g3_taste" && <G3Taste {...gameProps} />}
         {screen === "g3_smell" && <G3Smell {...gameProps} />}
 
-        {screen === "g4_volume" && <G4Volume {...gameProps} />}
-        {screen === "g4_pitch" && <G4Pitch {...gameProps} />}
       </AnimatePresence>
     </div>
   );

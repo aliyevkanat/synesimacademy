@@ -42,15 +42,6 @@ const categories: {
     floatStyle: { bottom: "calc(16% + 150px)", left: "calc(19% + 10px)" },
     floatDelay: 1.2,
   },
-  {
-    id: "cat4",
-    title: "Дыбыстар әлемі",
-    image: "/assets/images/menu4.png",
-    style: { position: "absolute", bottom: "16%", right: "16%", zIndex: 10 },
-    floatEmoji: "🎵",
-    floatStyle: { bottom: "calc(16% + 150px)", right: "calc(16% + 10px)" },
-    floatDelay: 1.8,
-  },
 ];
 
 const Nail = ({ side }: { side: "left" | "right" }) => (
