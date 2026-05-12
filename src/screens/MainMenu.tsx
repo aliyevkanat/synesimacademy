@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import TransparentBackButton from "../components/TransparentBackButton";
 import type { Screen } from "../types/game";
 import { playSound } from "../utils/audio";
 
@@ -6,58 +7,68 @@ interface MainMenuProps {
   go: (screen: Screen) => void;
 }
 
-const categories: {
+interface CategoryEntry {
   id: Screen;
   title: string;
   image: string;
-  style: React.CSSProperties;
-  floatEmoji: string;
-  floatStyle: React.CSSProperties;
-  floatDelay: number;
-}[] = [
+  /** Absolute placement on the map (desktop). Cat1 uses a separate wrapper. */
+  desktopStyle?: React.CSSProperties;
+  desktopWidth: string;
+}
+
+const categories: CategoryEntry[] = [
   {
     id: "cat1",
-    title: "Түрлі-түсті әлем",
-    image: "/assets/images/menu1.png",
-    style: { position: "absolute", top: "21%", left: "19%", zIndex: 10 },
-    floatEmoji: "🌈",
-    floatStyle: { top: "calc(21% - 30px)", left: "calc(19% + 10px)" },
-    floatDelay: 0,
+    title: "Ғажайып әлем",
+    image: "/assets/images/gazhaiyp_alem.png",
+    desktopWidth: "clamp(240px, 26vw, 360px)",
   },
   {
     id: "cat2",
     title: "Сиқырлы сандық",
-    image: "/assets/images/menu2.png",
-    style: { position: "absolute", top: "21%", right: "16%", zIndex: 10 },
-    floatEmoji: "✨",
-    floatStyle: { top: "calc(21% - 30px)", right: "calc(16% + 10px)" },
-    floatDelay: 0.6,
+    image: "/assets/images/siqurly_sandyk.png",
+    desktopStyle: {
+      position: "absolute",
+      top: "40%",
+      left: "40%",
+      transform: "translate(-50%, -50%)",
+      zIndex: 10,
+    },
+    desktopWidth: "clamp(240px, 26vw, 360px)",
   },
   {
     id: "cat3",
     title: "Дәм мен Иіс",
-    image: "/assets/images/menu3.png",
-    style: { position: "absolute", bottom: "16%", left: "19%", zIndex: 10 },
-    floatEmoji: "🍬",
-    floatStyle: { bottom: "calc(16% + 150px)", left: "calc(19% + 10px)" },
-    floatDelay: 1.2,
+    image: "/assets/images/dam_men_iys.png",
+    desktopStyle: { position: "absolute", bottom: "23%", right: "3%", zIndex: 10 },
+    desktopWidth: "clamp(240px, 26vw, 360px)",
   },
 ];
 
-const Nail = ({ side }: { side: "left" | "right" }) => (
-  <div
-    style={{
-      position: "absolute",
-      top: "8px",
-      [side]: "10px",
-      width: "10px",
-      height: "10px",
-      borderRadius: "50%",
-      background: "radial-gradient(circle at 35% 35%, #e0e0e0, #888)",
-      boxShadow: "0 1px 2px rgba(0,0,0,0.5)",
-    }}
-  />
-);
+interface IconProps {
+  src: string;
+  alt: string;
+  width: string;
+}
+
+function CategoryIcon({ src, alt, width }: IconProps) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      draggable={false}
+      style={{
+        width,
+        height: "auto",
+        display: "block",
+        filter: "drop-shadow(3px 5px 10px rgba(0,0,0,0.45))",
+      }}
+    />
+  );
+}
+
+const cat1Entry = categories.find((c) => c.id === "cat1")!;
+const categoriesWithoutCat1 = categories.filter((c) => c.id !== "cat1");
 
 export default function MainMenu({ go }: MainMenuProps) {
   return (
@@ -67,219 +78,153 @@ export default function MainMenu({ go }: MainMenuProps) {
         width: "100vw",
         height: "100vh",
         overflow: "hidden",
-        backgroundImage: "url('/assets/images/background.png')",
+        backgroundImage: "url('/assets/images/main_menu.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -40 }}
       transition={{ duration: 0.25 }}
     >
-      {/* Title */}
-      <div
-        style={{
-          position: "absolute",
-          top: "4%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          textAlign: "center",
-          zIndex: 10,
-          whiteSpace: "nowrap",
+      <TransparentBackButton
+        className="fixed top-4 left-4 z-20 md:hidden"
+        ariaLabel="Артқа — басты бет"
+        onClick={() => {
+          playSound("button_click.mp3");
+          go("welcome");
         }}
-      >
-        <h1
-          style={{
-            fontWeight: "900",
-            fontSize: "clamp(24px, 4vw, 44px)",
-            color: "#ffffff",
-            textShadow: "3px 3px 0px #5c3a00, -1px -1px 0px #5c3a00",
-            margin: 0,
-          }}
-        >
-          Сын есім академиясы
-        </h1>
-        <p
-          style={{
-            color: "#fff9e6",
-            fontWeight: "700",
-            fontSize: "clamp(12px, 1.8vw, 20px)",
-            textShadow: "1px 1px 3px rgba(0,0,0,0.7)",
-            margin: "4px 0 0",
-          }}
-        >
-          Қазақ тіліндегі сын есімдер
-        </p>
-      </div>
+      />
 
-      {/* Floating decorations */}
-      {categories.map((cat) => (
+      {/* Desktop: icons placed along the paths */}
+      <div className="hidden-on-mobile">
         <motion.div
-          key={`float-${cat.id}`}
           style={{
             position: "absolute",
-            fontSize: "20px",
-            pointerEvents: "none",
-            zIndex: 11,
-            ...cat.floatStyle,
+            bottom: "30%",
+            left: "5%",
+            zIndex: 10,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 14,
           }}
-          animate={{ y: [0, -10, 0], rotate: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2.5, delay: cat.floatDelay }}
+          initial={{ opacity: 0, y: 30, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0, type: "spring", stiffness: 200, damping: 18 }}
         >
-          {cat.floatEmoji}
+          <TransparentBackButton
+            ariaLabel="Артқа — басты бет"
+            onClick={() => {
+              playSound("button_click.mp3");
+              go("welcome");
+            }}
+          />
+          <motion.button
+            type="button"
+            role="button"
+            tabIndex={0}
+            aria-label={cat1Entry.title}
+            onClick={() => {
+              playSound("button_click.mp3");
+              go(cat1Entry.id);
+            }}
+            style={{
+              position: "relative",
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              lineHeight: 0,
+            }}
+            whileHover={{ y: -8, scale: 1.07, rotate: 0.8 }}
+            whileTap={{ scale: 0.94 }}
+          >
+            <CategoryIcon src={cat1Entry.image} alt={cat1Entry.title} width={cat1Entry.desktopWidth} />
+          </motion.button>
         </motion.div>
-      ))}
 
-      {/* Desktop: absolutely positioned cards */}
-      <div className="hidden-on-mobile">
-        {categories.map((cat, i) => (
+        {categoriesWithoutCat1.map((cat, i) => (
           <motion.button
             key={cat.id}
             type="button"
+            role="button"
+            tabIndex={0}
+            aria-label={cat.title}
             onClick={() => {
               playSound("button_click.mp3");
               go(cat.id);
             }}
             style={{
-              ...cat.style,
-              position: "absolute",
-              background: "linear-gradient(180deg, #f5deb3 0%, #deb887 50%, #c8a06e 100%)",
-              border: "4px solid #8b6914",
-              borderRadius: "16px",
-              boxShadow: "0 6px 0px #5a4009, 0 12px 24px rgba(0,0,0,0.45)",
-              padding: "20px 24px 24px",
-              width: "clamp(180px, 18vw, 240px)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              ...cat.desktopStyle,
+              background: "none",
+              border: "none",
+              padding: 0,
               cursor: "pointer",
+              lineHeight: 0,
             }}
             initial={{ opacity: 0, y: 30, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: i * 0.15, duration: 0.5, type: "spring" }}
-            whileHover={{ y: -8, scale: 1.08, rotate: 1 }}
-            whileTap={{ scale: 0.93 }}
+            transition={{ delay: (i + 1) * 0.18, type: "spring", stiffness: 200, damping: 18 }}
+            whileHover={{ y: -8, scale: 1.07, rotate: 0.8 }}
+            whileTap={{ scale: 0.94 }}
           >
-            {/* Hanging rope */}
-            <div
-              style={{
-                position: "absolute",
-                top: "-20px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: "4px",
-                height: "20px",
-                background: "linear-gradient(180deg, #8b6914, #c8a06e)",
-                borderRadius: "2px",
-              }}
-            />
-            {/* Nail decorations */}
-            <Nail side="left" />
-            <Nail side="right" />
-
-            <img
-              src={cat.image}
-              alt={cat.title}
-              style={{
-                width: "clamp(100px, 11vw, 140px)",
-                height: "clamp(100px, 11vw, 140px)",
-                objectFit: "contain",
-                mixBlendMode: "multiply",
-                filter: "drop-shadow(2px 3px 4px rgba(0,0,0,0.3))",
-              }}
-              draggable={false}
-            />
-            <span
-              style={{
-                fontWeight: "900",
-                fontSize: "clamp(14px, 1.6vw, 20px)",
-                textAlign: "center",
-                color: "#3d1f00",
-                marginTop: "12px",
-                textShadow: "0 1px 0 rgba(255,255,255,0.4)",
-              }}
-            >
-              {cat.title}
-            </span>
+            <CategoryIcon src={cat.image} alt={cat.title} width={cat.desktopWidth} />
           </motion.button>
         ))}
       </div>
 
-      {/* Mobile: 2×2 centered grid */}
-      <div className="mobile-grid">
+      {/* Mobile: centered vertical column of 3 icons */}
+      <div
+        className="mobile-grid"
+        style={{
+          display: "none",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 16,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 10,
+        }}
+      >
         {categories.map((cat, i) => (
           <motion.button
             key={`m-${cat.id}`}
             type="button"
+            role="button"
+            tabIndex={0}
+            aria-label={cat.title}
             onClick={() => {
               playSound("button_click.mp3");
               go(cat.id);
             }}
             style={{
-              background: "linear-gradient(180deg, #f5deb3 0%, #deb887 50%, #c8a06e 100%)",
-              border: "4px solid #8b6914",
-              borderRadius: "16px",
-              boxShadow: "0 6px 0px #5a4009, 0 12px 24px rgba(0,0,0,0.45)",
-              padding: "12px 14px 16px",
-              width: "140px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              background: "none",
+              border: "none",
+              padding: 0,
               cursor: "pointer",
-              position: "relative",
+              lineHeight: 0,
             }}
             initial={{ opacity: 0, y: 30, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: i * 0.15, duration: 0.5, type: "spring" }}
-            whileHover={{ y: -8, scale: 1.08, rotate: 1 }}
-            whileTap={{ scale: 0.93 }}
+            transition={{ delay: i * 0.18, type: "spring", stiffness: 200, damping: 18 }}
+            whileHover={{ y: -6, scale: 1.05, rotate: 0.8 }}
+            whileTap={{ scale: 0.94 }}
           >
-            <Nail side="left" />
-            <Nail side="right" />
-            <img
-              src={cat.image}
-              alt={cat.title}
-              style={{
-                width: "60px",
-                height: "60px",
-                objectFit: "contain",
-                mixBlendMode: "multiply",
-                filter: "drop-shadow(2px 3px 4px rgba(0,0,0,0.3))",
-              }}
-              draggable={false}
-            />
-            <span
-              style={{
-                fontWeight: "900",
-                fontSize: "clamp(11px, 3vw, 14px)",
-                textAlign: "center",
-                color: "#3d1f00",
-                marginTop: "8px",
-                textShadow: "0 1px 0 rgba(255,255,255,0.4)",
-              }}
-            >
-              {cat.title}
-            </span>
+            <CategoryIcon src={cat.image} alt={cat.title} width="190px" />
           </motion.button>
         ))}
       </div>
 
       <style>{`
         .hidden-on-mobile { display: block; }
-        .mobile-grid { display: none; }
 
         @media (max-width: 768px) {
           .hidden-on-mobile { display: none !important; }
-          .mobile-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 140px);
-            gap: 20px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-          }
+          .mobile-grid { display: flex !important; }
         }
       `}</style>
     </motion.div>

@@ -1,22 +1,21 @@
-import { motion } from "framer-motion";
+import clsx from "clsx";
 import { playSound } from "../utils/audio";
+import TransparentBackButton from "./TransparentBackButton";
 
 interface HomeButtonProps {
   onHome: () => void;
+  className?: string;
 }
 
-export default function HomeButton({ onHome }: HomeButtonProps) {
+export default function HomeButton({ onHome, className }: HomeButtonProps) {
   return (
-    <motion.button
+    <TransparentBackButton
+      ariaLabel="Артқа"
+      className={clsx("fixed top-4 left-4", className)}
       onClick={() => {
         playSound("button_click.mp3");
         onHome();
       }}
-      className="fixed top-4 left-4 z-50 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-2xl"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.93 }}
-    >
-      🏠
-    </motion.button>
+    />
   );
 }

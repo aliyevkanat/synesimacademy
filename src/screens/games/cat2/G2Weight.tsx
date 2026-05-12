@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { motion, useAnimationControls } from "framer-motion";
 import HomeButton from "../../../components/HomeButton";
-import WellDone from "../../../components/WellDone";
 import { playSound } from "../../../utils/audio";
 
 interface Props {
@@ -12,18 +11,152 @@ interface Props {
 
 type CupSide = "left" | "right";
 
-const ASSETS = {
-  base: "/assets/heavy_light_images/base.png",
-  crossbar: "/assets/heavy_light_images/crossbar.png",
-  leftCup: "/assets/heavy_light_images/left_pumpkin_cup.png",
-  rightCup: "/assets/heavy_light_images/right_eggplant_cup.png",
-} as const;
+type CupAnchorX = "left" | "right";
 
-function fireCorrectConfetti() {
-  const colors = ["#ff4d8d", "#ffcc00", "#4ade80", "#22c55e", "#60a5fa", "#a855f7"];
-  const origin = { x: 0.33, y: 0.6 };
+interface CupStyle {
+  width: string;
+  anchorX: CupAnchorX;
+  anchorPercent: number;
+  topPercent: number;
+  offsetX: number;
+  offsetY: number;
+}
 
-  const burst = (particleCount: number, spread: number, startVelocity: number) => {
+interface LevelConfig {
+  title: string;
+  subtitle: string;
+  leftImage: string;
+  leftAlt: string;
+  rightImage: string;
+  rightAlt: string;
+  correctSide: CupSide;
+  heavySide: CupSide;
+  leftStyle: CupStyle;
+  rightStyle: CupStyle;
+}
+
+const LEVELS: LevelConfig[] = [
+  {
+    title: "Қайсысы ауыр?",
+    subtitle: "Ауыр затты таңда",
+    leftImage: "/assets/heavy_light_images/left_pumpkin_cup.png",
+    leftAlt: "pumpkin (heavy)",
+    rightImage: "/assets/heavy_light_images/right_eggplant_cup.png",
+    rightAlt: "eggplant (light)",
+    correctSide: "left",
+    heavySide: "left",
+    leftStyle: {
+      width: "w-[530px] sm:w-[600px]",
+      anchorX: "left",
+      anchorPercent: -34,
+      topPercent: 41,
+      offsetX: 20,
+      offsetY: 0,
+    },
+    rightStyle: {
+      width: "w-[520px] sm:w-[590px]",
+      anchorX: "right",
+      anchorPercent: -32,
+      topPercent: 40,
+      offsetX: 12,
+      offsetY: 0,
+    },
+  },
+  {
+    title: "Қайсысы жеңіл?",
+    subtitle: "Жеңіл затты таңда",
+    leftImage: "/assets/heavy_light_images/left_pencil_cup_game2.png",
+    leftAlt: "pencil (light)",
+    rightImage: "/assets/heavy_light_images/right_iron_cup_game2.png",
+    rightAlt: "iron (heavy)",
+    correctSide: "left",
+    heavySide: "right",
+    leftStyle: {
+      width: "w-[232px] sm:w-[268px]",
+      anchorX: "left",
+      anchorPercent: -34,
+      topPercent: 41,
+      offsetX: 188,
+      offsetY: 0,
+    },
+    rightStyle: {
+      width: "w-[250px] sm:w-[290px]",
+      anchorX: "right",
+      anchorPercent: -32,
+      topPercent: 40,
+      offsetX: -120,
+      offsetY: 0,
+    },
+  },
+  {
+    title: "Қайсысы ауыр?",
+    subtitle: "Ауыр затты таңда",
+    leftImage: "/assets/heavy_light_images/left_bucket_cup_game3.png",
+    leftAlt: "bucket (heavy)",
+    rightImage: "/assets/heavy_light_images/right_wallet_cup_game3.png",
+    rightAlt: "wallet (light)",
+    correctSide: "left",
+    heavySide: "left",
+    leftStyle: {
+      width: "w-[300px] sm:w-[340px]",
+      anchorX: "left",
+      anchorPercent: -34,
+      topPercent: 41,
+      offsetX: 180,
+      offsetY: 0,
+    },
+    rightStyle: {
+      width: "w-[290px] sm:w-[330px]",
+      anchorX: "right",
+      anchorPercent: -32,
+      topPercent: 40,
+      offsetX: -120,
+      offsetY: 0,
+    },
+  },
+  {
+    title: "Қайсысы жеңіл?",
+    subtitle: "Жеңіл затты таңда",
+    leftImage: "/assets/heavy_light_images/left_aquarium_game4.png",
+    leftAlt: "aquarium (heavy)",
+    rightImage: "/assets/heavy_light_images/right_pipe_game4.png",
+    rightAlt: "pipe (light)",
+    correctSide: "right",
+    heavySide: "left",
+    leftStyle: {
+      width: "w-[242px] sm:w-[282px]",
+      anchorX: "left",
+      anchorPercent: -34,
+      topPercent: 41,
+      offsetX: 165,
+      offsetY: -24,
+    },
+    rightStyle: {
+      width: "w-[268px] sm:w-[308px]",
+      anchorX: "right",
+      anchorPercent: -32,
+      topPercent: 40,
+      offsetX: -80,
+      offsetY: 0,
+    },
+  },
+];
+
+const CONFETTI_COLORS = [
+  "#ff4d8d",
+  "#ffcc00",
+  "#4ade80",
+  "#22c55e",
+  "#60a5fa",
+  "#a855f7",
+];
+
+function fireConfettiAt(origin: { x: number; y: number }) {
+  const burst = (
+    particleCount: number,
+    spread: number,
+    startVelocity: number,
+  ) => {
     confetti({
       particleCount,
       spread,
@@ -32,7 +165,7 @@ function fireCorrectConfetti() {
       ticks: 220,
       scalar: 0.95,
       origin,
-      colors,
+      colors: CONFETTI_COLORS,
     });
   };
 
@@ -41,9 +174,10 @@ function fireCorrectConfetti() {
   window.setTimeout(() => burst(35, 86, 28), 460);
 }
 
-export default function G2Weight({ onHome, onReplay }: Props) {
+export default function G2Weight({ onHome }: Props) {
+  const [currentLevel, setCurrentLevel] = useState(0);
   const [tiltAngle, setTiltAngle] = useState(0);
-  const [showWellDone, setShowWellDone] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
   const [locked, setLocked] = useState(false);
   const [wrongSide, setWrongSide] = useState<CupSide | null>(null);
 
@@ -58,7 +192,18 @@ export default function G2Weight({ onHome, onReplay }: Props) {
 
   useEffect(() => clearTimers, []);
 
+  const level = LEVELS[currentLevel];
   const cupInverseRotate = useMemo(() => -tiltAngle, [tiltAngle]);
+
+  const leftCupY = useMemo(() => {
+    if (tiltAngle === 0) return 0;
+    return level.heavySide === "left" ? 24 : -24;
+  }, [tiltAngle, level.heavySide]);
+
+  const rightCupY = useMemo(() => {
+    if (tiltAngle === 0) return 0;
+    return level.heavySide === "right" ? 24 : -24;
+  }, [tiltAngle, level.heavySide]);
 
   const triggerWrong = async (side: CupSide) => {
     playSound("wrong_answer.mp3");
@@ -70,7 +215,10 @@ export default function G2Weight({ onHome, onReplay }: Props) {
       transition: { duration: 0.4, ease: "easeInOut" },
     });
 
-    const t = window.setTimeout(() => setWrongSide((s) => (s === side ? null : s)), 260);
+    const t = window.setTimeout(
+      () => setWrongSide((s) => (s === side ? null : s)),
+      260,
+    );
     timersRef.current.push(t);
   };
 
@@ -78,21 +226,49 @@ export default function G2Weight({ onHome, onReplay }: Props) {
     if (locked) return;
     setLocked(true);
     playSound("correct_answer.mp3");
-    setTiltAngle(-12);
-    fireCorrectConfetti();
 
-    const t = window.setTimeout(() => setShowWellDone(true), 1900);
+    const angle = level.heavySide === "left" ? -12 : 12;
+    setTiltAngle(angle);
+
+    const confettiX = level.correctSide === "left" ? 0.33 : 0.67;
+    fireConfettiAt({ x: confettiX, y: 0.6 });
+
+    const t = window.setTimeout(() => setShowComplete(true), 1900);
     timersRef.current.push(t);
   };
 
   const onPick = (side: CupSide) => {
     if (locked) return;
-    if (side === "left") {
+    if (side === level.correctSide) {
       triggerCorrect();
       return;
     }
     void triggerWrong(side);
   };
+
+  const resetLevel = () => {
+    clearTimers();
+    setTiltAngle(0);
+    setShowComplete(false);
+    setLocked(false);
+    setWrongSide(null);
+  };
+
+  const handleNext = () => {
+    if (currentLevel >= LEVELS.length - 1) {
+      clearTimers();
+      onHome();
+      return;
+    }
+    resetLevel();
+    setCurrentLevel((prev) => prev + 1);
+  };
+
+  const handleReplay = () => {
+    resetLevel();
+  };
+
+  const isLastLevel = currentLevel >= LEVELS.length - 1;
 
   return (
     <div
@@ -124,32 +300,61 @@ export default function G2Weight({ onHome, onReplay }: Props) {
       </div>
 
       <motion.div
-        className="relative w-full max-w-[980px] rounded-[34px] border-[6px] border-pink-300/90 bg-white/65 shadow-2xl backdrop-blur-md px-6 sm:px-10 pt-3 sm:pt-5 pb-10"
+        className="relative w-full max-w-[1080px] rounded-[34px] border-[6px] border-pink-300/90 bg-white/65 shadow-2xl backdrop-blur-md px-6 sm:px-10 pt-3 sm:pt-5 pb-10"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <div className="translate-y-6 sm:translate-y-8">
-          <div className="text-center">
-            <div
-              className="inline-block -translate-y-3 sm:-translate-y-4 text-[40px] sm:text-[52px] font-black tracking-tight text-fuchsia-700"
+        <div className="translate-y-4 sm:translate-y-5">
+          <div className="relative z-10 text-center -translate-y-4 sm:-translate-y-6">
+            <motion.div
+              key={`title-${currentLevel}`}
+              className="inline-block -translate-y-4 sm:-translate-y-5 text-[40px] sm:text-[52px] font-black tracking-tight text-fuchsia-700"
               style={{
                 textShadow:
                   "0 3px 0 rgba(255,255,255,0.9), 0 7px 18px rgba(126,34,206,0.28)",
                 WebkitTextStroke: "2px rgba(255,255,255,0.85)",
               }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              Қайсысы ауыр?
-            </div>
-            <div className="-translate-y-2 sm:-translate-y-3 mt-0 text-lg sm:text-xl font-extrabold text-purple-800/90">
-              Ауыр затты таңда
+              {level.title}
+            </motion.div>
+            <motion.div
+              key={`sub-${currentLevel}`}
+              className="-translate-y-3 sm:-translate-y-4 mt-0 text-lg sm:text-xl font-extrabold text-purple-800/90"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {level.subtitle}
+            </motion.div>
+
+            <div className="flex items-center justify-center gap-2 mt-0.5 -translate-y-1 sm:-translate-y-2">
+              {LEVELS.map((_, i) => (
+                <div
+                  key={i}
+                  className={[
+                    "w-3 h-3 rounded-full transition-all duration-300",
+                    i === currentLevel
+                      ? "bg-fuchsia-500 scale-125 shadow-md"
+                      : i < currentLevel
+                        ? "bg-fuchsia-300"
+                        : "bg-purple-200",
+                  ].join(" ")}
+                />
+              ))}
+              <span className="ml-2 text-sm font-bold text-purple-600/70">
+                {currentLevel + 1}/{LEVELS.length}
+              </span>
             </div>
           </div>
 
           <div className="mt-20 sm:mt-24 flex items-center justify-center">
             <div className="relative w-full max-w-[760px] h-[430px] sm:h-[470px]">
               <img
-                src={ASSETS.base}
+                src="/assets/heavy_light_images/base.png"
                 alt="scale base"
                 draggable={false}
                 className="absolute left-1/2 bottom-0 -translate-x-1/2 w-[360px] sm:w-[420px] select-none"
@@ -161,121 +366,160 @@ export default function G2Weight({ onHome, onReplay }: Props) {
                 animate={{ rotate: tiltAngle }}
                 transition={{ type: "spring", stiffness: 170, damping: 18 }}
               >
-              <img
-                src={ASSETS.crossbar}
-                alt="scale crossbar"
-                draggable={false}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full"
-              />
+                <img
+                  src="/assets/heavy_light_images/crossbar.png"
+                  alt="scale crossbar"
+                  draggable={false}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full"
+                />
 
-              <motion.button
-                type="button"
-                onClick={() => onPick("left")}
-                disabled={locked}
-                className={[
-                  "absolute left-[-34%] top-[41%] w-[540px] sm:w-[620px] origin-top cursor-pointer",
-                  "focus:outline-none",
-                ].join(" ")}
-                style={{ transformOrigin: "50% 0%" }}
-                whileHover={locked ? undefined : { scale: 1.06 }}
-                whileTap={locked ? undefined : { scale: 0.95 }}
-                animate={{
-                  y: tiltAngle === 0 ? 0 : 24,
-                  rotate: cupInverseRotate,
-                  filter: wrongSide === "left" ? "drop-shadow(0 0 0 rgba(0,0,0,0))" : "drop-shadow(0 8px 16px rgba(0,0,0,0.18))",
-                }}
-                transition={{ type: "spring", stiffness: 210, damping: 16 }}
-              >
-                <motion.div
-                  animate={leftControls}
+                <motion.button
+                  type="button"
+                  onClick={() => onPick("left")}
+                  disabled={locked}
                   className={[
-                    "relative rounded-2xl",
-                    wrongSide === "left"
-                      ? "ring-4 ring-red-400 shadow-[0_0_0_6px_rgba(248,113,113,0.25)]"
-                      : "ring-0",
+                    "absolute origin-top cursor-pointer focus:outline-none",
+                    level.leftStyle.width,
                   ].join(" ")}
                   style={{
-                    boxShadow:
+                    transformOrigin: "50% 0%",
+                    [level.leftStyle.anchorX]: `${level.leftStyle.anchorPercent}%`,
+                    top: `${level.leftStyle.topPercent}%`,
+                  }}
+                  whileHover={locked ? undefined : { scale: 1.06 }}
+                  whileTap={locked ? undefined : { scale: 0.95 }}
+                  animate={{
+                    x: level.leftStyle.offsetX,
+                    y: leftCupY + level.leftStyle.offsetY,
+                    rotate: cupInverseRotate,
+                    filter:
                       wrongSide === "left"
-                        ? "0 0 0 6px rgba(248,113,113,0.25)"
-                        : "0 0 0 0 rgba(0,0,0,0)",
+                        ? "drop-shadow(0 0 0 rgba(0,0,0,0))"
+                        : "drop-shadow(0 8px 16px rgba(0,0,0,0.18))",
                   }}
+                  transition={{ type: "spring", stiffness: 210, damping: 16 }}
                 >
-                  <img
-                    src={ASSETS.leftCup}
-                    alt="pumpkin (heavy)"
-                    draggable={false}
-                    className="w-full h-auto select-none"
-                  />
-                  {!locked && (
-                    <div
-                      className="absolute -inset-2 rounded-3xl opacity-0"
-                      style={{
-                        boxShadow: "0 0 0 0 rgba(236,72,153,0.0)",
-                      }}
+                  <motion.div
+                    animate={leftControls}
+                    className={[
+                      "relative rounded-2xl",
+                      wrongSide === "left"
+                        ? "ring-4 ring-red-400 shadow-[0_0_0_6px_rgba(248,113,113,0.25)]"
+                        : "ring-0",
+                    ].join(" ")}
+                    style={{
+                      boxShadow:
+                        wrongSide === "left"
+                          ? "0 0 0 6px rgba(248,113,113,0.25)"
+                          : "0 0 0 0 rgba(0,0,0,0)",
+                    }}
+                  >
+                    <img
+                      src={level.leftImage}
+                      alt={level.leftAlt}
+                      draggable={false}
+                      className="w-full h-auto select-none"
                     />
-                  )}
-                </motion.div>
-              </motion.button>
+                    {!locked && (
+                      <div
+                        className="absolute -inset-2 rounded-3xl opacity-0"
+                        style={{
+                          boxShadow: "0 0 0 0 rgba(236,72,153,0.0)",
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                </motion.button>
 
-              <motion.button
-                type="button"
-                onClick={() => onPick("right")}
-                disabled={locked}
-                className={[
-                  "absolute right-[-32%] top-[40%] w-[520px] sm:w-[580px] origin-top cursor-pointer",
-                  "focus:outline-none",
-                ].join(" ")}
-                style={{ transformOrigin: "50% 0%" }}
-                whileHover={locked ? undefined : { scale: 1.06 }}
-                whileTap={locked ? undefined : { scale: 0.95 }}
-                animate={{
-                  y: tiltAngle === 0 ? 0 : -24,
-                  rotate: cupInverseRotate,
-                  filter: wrongSide === "right" ? "drop-shadow(0 0 0 rgba(0,0,0,0))" : "drop-shadow(0 8px 16px rgba(0,0,0,0.18))",
-                }}
-                transition={{ type: "spring", stiffness: 210, damping: 16 }}
-              >
-                <motion.div
-                  animate={rightControls}
+                <motion.button
+                  type="button"
+                  onClick={() => onPick("right")}
+                  disabled={locked}
                   className={[
-                    "relative rounded-2xl",
-                    wrongSide === "right"
-                      ? "ring-4 ring-red-400 shadow-[0_0_0_6px_rgba(248,113,113,0.25)]"
-                      : "ring-0",
+                    "absolute origin-top cursor-pointer focus:outline-none",
+                    level.rightStyle.width,
                   ].join(" ")}
                   style={{
-                    boxShadow:
-                      wrongSide === "right"
-                        ? "0 0 0 6px rgba(248,113,113,0.25)"
-                        : "0 0 0 0 rgba(0,0,0,0)",
+                    transformOrigin: "50% 0%",
+                    [level.rightStyle.anchorX]: `${level.rightStyle.anchorPercent}%`,
+                    top: `${level.rightStyle.topPercent}%`,
                   }}
+                  whileHover={locked ? undefined : { scale: 1.06 }}
+                  whileTap={locked ? undefined : { scale: 0.95 }}
+                  animate={{
+                    x: level.rightStyle.offsetX,
+                    y: rightCupY + level.rightStyle.offsetY,
+                    rotate: cupInverseRotate,
+                    filter:
+                      wrongSide === "right"
+                        ? "drop-shadow(0 0 0 rgba(0,0,0,0))"
+                        : "drop-shadow(0 8px 16px rgba(0,0,0,0.18))",
+                  }}
+                  transition={{ type: "spring", stiffness: 210, damping: 16 }}
                 >
-                  <img
-                    src={ASSETS.rightCup}
-                    alt="eggplant (light)"
-                    draggable={false}
-                    className="w-full h-auto select-none"
-                  />
-                </motion.div>
-              </motion.button>
-            </motion.div>
+                  <motion.div
+                    animate={rightControls}
+                    className={[
+                      "relative rounded-2xl",
+                      wrongSide === "right"
+                        ? "ring-4 ring-red-400 shadow-[0_0_0_6px_rgba(248,113,113,0.25)]"
+                        : "ring-0",
+                    ].join(" ")}
+                    style={{
+                      boxShadow:
+                        wrongSide === "right"
+                          ? "0 0 0 6px rgba(248,113,113,0.25)"
+                          : "0 0 0 0 rgba(0,0,0,0)",
+                    }}
+                  >
+                    <img
+                      src={level.rightImage}
+                      alt={level.rightAlt}
+                      draggable={false}
+                      className="w-full h-auto select-none"
+                    />
+                  </motion.div>
+                </motion.button>
+              </motion.div>
+            </div>
           </div>
-        </div>
         </div>
       </motion.div>
 
-      {showWellDone && (
-        <WellDone
-          onReplay={() => {
-            clearTimers();
-            onReplay();
-          }}
-          onHome={() => {
-            clearTimers();
-            onHome();
-          }}
-        />
+      {showComplete && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            className="bg-white rounded-3xl shadow-2xl p-10 flex flex-col items-center gap-6 mx-4"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <span className="text-7xl">🌟</span>
+            <p className="text-3xl font-bold text-slate-700">Жарайсың!</p>
+            <div className="flex gap-4">
+              <motion.button
+                onClick={handleReplay}
+                className="px-6 py-3 bg-amber-400 text-white font-bold text-lg rounded-2xl shadow-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                🔄 Қайталау
+              </motion.button>
+              <motion.button
+                onClick={handleNext}
+                className="px-6 py-3 bg-emerald-500 text-white font-bold text-lg rounded-2xl shadow-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {isLastLevel ? "🏠 Мәзірге" : "Келесі ▶"}
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );

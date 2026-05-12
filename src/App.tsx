@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Screen } from "./types/game";
 
-import Fox from "./components/Fox";
+import WelcomeMenu from "./screens/WelcomeMenu";
 import MainMenu from "./screens/MainMenu";
 import CategoryMenu from "./screens/CategoryMenu";
+import Cat1CategoryMenu from "./screens/Cat1CategoryMenu";
 import Cat2CategoryMenu from "./screens/Cat2CategoryMenu";
+import Cat3CategoryMenu from "./screens/Cat3CategoryMenu";
 
 import G1ColorMode from "./screens/games/cat1/G1ColorMode";
+import G1ColorQuiz from "./screens/games/cat1/G1ColorQuiz";
 import G1LearnColors from "./screens/games/cat1/G1LearnColors";
 import G1ColorDetail from "./screens/games/cat1/G1ColorDetail";
 import G1Size from "./screens/games/cat1/G1Size";
@@ -20,6 +23,7 @@ import G1LengthQuiz from "./screens/games/cat1/G1LengthQuiz";
 import G1Height from "./screens/games/cat1/G1Height";
 import G1WidthMode from "./screens/games/cat1/G1WidthMode";
 import G1WidthLearn from "./screens/games/cat1/G1WidthLearn";
+import G1WidthQuiz from "./screens/games/cat1/G1WidthQuiz";
 import G1Quiz from "./screens/games/cat1/G1Quiz";
 
 import G2Temperature from "./screens/games/cat2/G2Temperature";
@@ -29,17 +33,21 @@ import G2TempHot from "./screens/games/cat2/G2TempHot";
 import G2TempCold from "./screens/games/cat2/G2TempCold";
 import G2TempQuiz from "./screens/games/cat2/G2TempQuiz";
 import G2Texture from "./screens/games/cat2/G2Texture";
+import G2TextureMode from "./screens/games/cat2/G2TextureMode";
+import G2TextureLearn from "./screens/games/cat2/G2TextureLearn";
+import G2TextureQuiz from "./screens/games/cat2/G2TextureQuiz";
+import G2WeightMode from "./screens/games/cat2/G2WeightMode";
+import G2WeightLearn from "./screens/games/cat2/G2WeightLearn";
 import G2Weight from "./screens/games/cat2/G2Weight";
 
 import G3Taste from "./screens/games/cat3/G3Taste";
+import G3TasteMode from "./screens/games/cat3/G3TasteMode";
+import G3TasteLearn from "./screens/games/cat3/G3TasteLearn";
+import G3SourMode from "./screens/games/cat3/G3SourMode";
+import G3SourLearn from "./screens/games/cat3/G3SourLearn";
 import G3Smell from "./screens/games/cat3/G3Smell";
-
-const cat1Games = [
-  { id: "g1_color_mode" as Screen, label: "Түстер", emoji: "🌈" },
-  { id: "g1_size_mode" as Screen, label: "Үлкен және Кіші", emoji: "🐻" },
-  { id: "g1_length_mode" as Screen, label: "Ұзын және Қысқа", emoji: "🐰" },
-  { id: "g1_width_mode" as Screen, label: "Жуан және Жіңішке", emoji: "🪵" },
-];
+import G3SmellMode from "./screens/games/cat3/G3SmellMode";
+import G3SmellLearn from "./screens/games/cat3/G3SmellLearn";
 
 const cat2Games = [
   { id: "g2_temp_mode" as Screen, label: "Ыстық және Суық", emoji: "🌡️" },
@@ -48,12 +56,13 @@ const cat2Games = [
 ];
 
 const cat3Games = [
-  { id: "g3_taste" as Screen, label: "Тәтті және Ащы", emoji: "🍬" },
+  { id: "g3_taste_mode" as Screen, label: "Тәтті және Ащы", emoji: "🍬" },
+  { id: "g3_sour" as Screen, label: "Тәтті және қышқыл", emoji: "🍋" },
   { id: "g3_smell" as Screen, label: "Хош және Жағымсыз иіс", emoji: "🌸" },
 ];
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("menu");
+  const [screen, setScreen] = useState<Screen>("welcome");
   const [replayKey, setReplayKey] = useState(0);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [soundMuted, setSoundMuted] = useState<boolean>(() => {
@@ -150,11 +159,18 @@ export default function App() {
 
   return (
     <div className="font-nunito">
-      <Fox />
+      <div
+        className="fixed bottom-4 left-4 z-50 pointer-events-none select-none rounded-lg px-3 py-1.5"
+        style={{ background: "rgba(0,0,0,0.35)" }}
+      >
+        <span className="text-[19px] font-bold text-white leading-tight" style={{ opacity: 0.85 }}>
+          Алиева Дананың авторлық интербелсенді платформасы
+        </span>
+      </div>
       <motion.button
         type="button"
         onClick={() => setMuted(!soundMuted)}
-        className="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-purple-200/90 shadow-lg flex items-center justify-center"
+        className={`fixed right-4 z-50 w-12 h-12 rounded-full bg-purple-200/90 shadow-lg flex items-center justify-center ${screen === "cat1" ? "!top-2" : "top-4"}`}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         aria-label={soundMuted ? "Unmute sound" : "Mute sound"}
@@ -166,14 +182,13 @@ export default function App() {
         )}
       </motion.button>
       <AnimatePresence mode="wait">
+        {screen === "welcome" && <WelcomeMenu key="welcome" onStart={() => go("menu")} />}
         {screen === "menu" && <MainMenu key="menu" go={go} />}
 
         {screen === "cat1" && (
-          <CategoryMenu
+          <Cat1CategoryMenu
             key="cat1"
-            title="🎨 Түрлі-түсті әлем"
-            color="#0369a1"
-            games={cat1Games}
+            title="Ғажайып әлем"
             onSelect={go}
             onHome={home}
           />
@@ -186,21 +201,22 @@ export default function App() {
           />
         )}
         {screen === "cat3" && (
-          <CategoryMenu
-            key="cat3"
-            title="🍬 Дәм мен Иіс"
-            color="#be185d"
-            games={cat3Games}
-            onSelect={go}
-            onHome={home}
-          />
+          <Cat3CategoryMenu key="cat3" onSelect={go} onHome={home} />
         )}
 
         {screen === "g1_color_mode" && (
           <G1ColorMode
             onLearn={() => go("g1_learn_colors")}
-            onQuiz={() => go("g1_quiz")}
+            onQuiz={() => go("g1_color_quiz")}
             onHome={() => go("cat1")}
+          />
+        )}
+        {screen === "g1_color_quiz" && (
+          <G1ColorQuiz
+            key={`g1_color_quiz_${replayKey}`}
+            onBack={() => go("g1_color_mode")}
+            onHome={home}
+            onReplay={replay}
           />
         )}
         {screen === "g1_learn_colors" && (
@@ -277,6 +293,7 @@ export default function App() {
         {screen === "g1_width_mode" && (
           <G1WidthMode
             onLearn={() => go("g1_width_learn")}
+            onQuiz={() => go("g1_width_quiz")}
             onHome={() => go("cat1")}
           />
         )}
@@ -284,6 +301,14 @@ export default function App() {
           <G1WidthLearn
             onBack={() => go("g1_width_mode")}
             onHome={home}
+          />
+        )}
+        {screen === "g1_width_quiz" && (
+          <G1WidthQuiz
+            key={`g1_width_quiz_${replayKey}`}
+            onBack={() => go("g1_width_mode")}
+            onHome={home}
+            onReplay={replay}
           />
         )}
 
@@ -330,9 +355,93 @@ export default function App() {
         )}
 
         {screen === "g2_texture" && <G2Texture {...gameProps} />}
+        {screen === "g2_texture_mode" && (
+          <G2TextureMode
+            key="g2_texture_mode"
+            onLearn={() => go("g2_texture_learn")}
+            onQuiz={() => go("g2_texture_quiz")}
+            onHome={() => go("cat2")}
+          />
+        )}
+        {screen === "g2_texture_learn" && (
+          <G2TextureLearn
+            key="g2_texture_learn"
+            onBack={() => go("g2_texture_mode")}
+            onHome={home}
+          />
+        )}
+        {screen === "g2_texture_quiz" && (
+          <G2TextureQuiz
+            key={`g2_texture_quiz_${replayKey}`}
+            onBack={() => go("g2_texture_mode")}
+            onHome={home}
+            onReplay={replay}
+          />
+        )}
+        {screen === "g2_weight_mode" && (
+          <G2WeightMode
+            key="g2_weight_mode"
+            onLearn={() => go("g2_weight_learn")}
+            onQuiz={() => go("g2_weight")}
+            onHome={() => go("cat2")}
+          />
+        )}
+        {screen === "g2_weight_learn" && (
+          <G2WeightLearn
+            key="g2_weight_learn"
+            onBack={() => go("g2_weight_mode")}
+            onHome={home}
+          />
+        )}
         {screen === "g2_weight" && <G2Weight {...gameProps} />}
 
-        {screen === "g3_taste" && <G3Taste {...gameProps} />}
+        {screen === "g3_taste_mode" && (
+          <G3TasteMode
+            key="g3_taste_mode"
+            onLearn={() => go("g3_taste_learn")}
+            onQuiz={() => go("g3_taste")}
+            onHome={() => go("cat3")}
+          />
+        )}
+        {screen === "g3_taste_learn" && (
+          <G3TasteLearn
+            key="g3_taste_learn"
+            onBack={() => go("g3_taste_mode")}
+            onHome={home}
+          />
+        )}
+        {screen === "g3_taste" && <G3Taste {...gameProps} variant="sweet_spicy" />}
+        {screen === "g3_sour_mode" && (
+          <G3SourMode
+            key="g3_sour_mode"
+            onLearn={() => go("g3_sour_learn")}
+            onQuiz={() => go("g3_sour")}
+            onHome={() => go("cat3")}
+          />
+        )}
+        {screen === "g3_sour_learn" && (
+          <G3SourLearn
+            key="g3_sour_learn"
+            onBack={() => go("g3_sour_mode")}
+            onHome={home}
+          />
+        )}
+        {screen === "g3_sour" && <G3Taste {...gameProps} variant="sweet_sour" />}
+        {screen === "g3_smell_mode" && (
+          <G3SmellMode
+            key="g3_smell_mode"
+            onLearn={() => go("g3_smell_learn")}
+            onQuiz={() => go("g3_smell")}
+            onHome={() => go("cat3")}
+          />
+        )}
+        {screen === "g3_smell_learn" && (
+          <G3SmellLearn
+            key="g3_smell_learn"
+            onBack={() => go("g3_smell_mode")}
+            onHome={home}
+          />
+        )}
         {screen === "g3_smell" && <G3Smell {...gameProps} />}
 
       </AnimatePresence>

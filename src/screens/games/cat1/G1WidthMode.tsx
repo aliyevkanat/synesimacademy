@@ -4,10 +4,11 @@ import { playSound } from "../../../utils/audio";
 
 interface Props {
   onLearn: () => void;
+  onQuiz: () => void;
   onHome: () => void;
 }
 
-export default function G1WidthMode({ onLearn, onHome }: Props) {
+export default function G1WidthMode({ onLearn, onQuiz, onHome }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -178,51 +179,40 @@ export default function G1WidthMode({ onLearn, onHome }: Props) {
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 170, damping: 16, delay: 0.08 }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              playSound("button_click.mp3");
+              onQuiz();
+            }}
             style={{
               borderRadius: 28,
               overflow: "hidden",
-              boxShadow: "0 14px 28px rgba(96, 103, 128, 0.22)",
-              border: "3px solid rgba(255,255,255,0.72)",
-              background: "linear-gradient(145deg, #d9dce5 0%, #bdc3d1 100%)",
-              filter: "saturate(0.7)",
+              cursor: "pointer",
+              boxShadow: "0 18px 34px rgba(110, 73, 176, 0.26)",
+              border: "3px solid rgba(255,255,255,0.55)",
+              background: "linear-gradient(145deg, #ce93d8 0%, #ab47bc 45%, #7b1fa2 100%)",
             }}
           >
             <div style={{ padding: "22px 20px 18px", position: "relative" }}>
-              <div
-                style={{
-                  position: "absolute",
-                  top: 14,
-                  right: 14,
-                  background: "#70788a",
-                  color: "#fff",
-                  borderRadius: 12,
-                  padding: "4px 10px",
-                  fontWeight: 900,
-                  fontSize: 12,
-                  letterSpacing: 0.5,
-                }}
-              >
-                ЖАҚЫНДА
-              </div>
-              <div style={{ fontSize: 28, fontWeight: 900, color: "#4d556a", marginRight: 74 }}>Біліміңді тексеріп көр</div>
+              <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,0.22)" }}>Біліміңді тексеріп көр</div>
               <div
                 style={{
                   marginTop: 14,
                   borderRadius: 18,
-                  background: "rgba(255,255,255,0.35)",
-                  border: "2px solid rgba(255,255,255,0.58)",
-                  padding: 18,
+                  background: "rgba(255,255,255,0.26)",
+                  border: "2px solid rgba(255,255,255,0.52)",
+                  padding: 14,
                   minHeight: 130,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#677084",
-                  fontSize: 24,
-                  fontWeight: 900,
-                  gap: 8,
+                  gap: 14,
                 }}
               >
-                🔒 Құлыптаулы
+                <img src="/assets/thin_thick_images/thin_tree_decor.png" alt="Тапсырма мысалы 1" style={{ width: 98, height: 98, objectFit: "contain" }} />
+                <span style={{ color: "#fff", fontWeight: 900, fontSize: 24 }}>?</span>
+                <img src="/assets/thin_thick_images/thick_tree_decor.png" alt="Тапсырма мысалы 2" style={{ width: 98, height: 98, objectFit: "contain" }} />
               </div>
             </div>
             <div
@@ -232,7 +222,7 @@ export default function G1WidthMode({ onLearn, onHome }: Props) {
                 textAlign: "center",
               }}
             >
-              <div style={{ color: "#5b6478", fontWeight: 800, marginBottom: 12, fontSize: 15 }}>Жақында қосылады...</div>
+              <div style={{ color: "#513299", fontWeight: 800, marginBottom: 12, fontSize: 15 }}>Дұрыс суретті таңдап көр</div>
               <div
                 style={{
                   width: "80%",
@@ -242,11 +232,11 @@ export default function G1WidthMode({ onLearn, onHome }: Props) {
                   color: "#fff",
                   fontWeight: 900,
                   fontSize: 18,
-                  background: "linear-gradient(135deg, #8e95a8, #737b8f)",
-                  opacity: 0.9,
+                  background: "linear-gradient(135deg, #6f7cff, #ca5cff)",
+                  boxShadow: "0 8px 18px rgba(111,124,255,0.3)",
                 }}
               >
-                Coming soon
+                Бастау ▶
               </div>
             </div>
           </motion.div>

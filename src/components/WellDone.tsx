@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
 
 interface WellDoneProps {
   onReplay: () => void;
@@ -6,6 +8,52 @@ interface WellDoneProps {
 }
 
 export default function WellDone({ onReplay, onHome }: WellDoneProps) {
+  useEffect(() => {
+    const duration = 2200;
+    const animationEnd = Date.now() + duration;
+    const defaults = {
+      startVelocity: 38,
+      spread: 360,
+      ticks: 70,
+      zIndex: 60,
+      colors: ["#FFD166", "#06D6A0", "#118AB2", "#EF476F", "#FF9F80", "#A78BFA"],
+    };
+
+    const randomInRange = (min: number, max: number) =>
+      Math.random() * (max - min) + min;
+
+    // Initial big burst from the center
+    confetti({
+      ...defaults,
+      particleCount: 140,
+      origin: { x: 0.5, y: 0.55 },
+      spread: 110,
+      startVelocity: 55,
+    });
+
+    // Continuous side bursts for ~2 seconds
+    const interval = window.setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) {
+        window.clearInterval(interval);
+        return;
+      }
+      const particleCount = 40 * (timeLeft / duration);
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+      });
+    }, 280);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
