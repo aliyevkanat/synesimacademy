@@ -210,15 +210,15 @@ export default function G1LengthMode({ onLearn, onQuiz, onHome }: Props) {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 16,
+                  gap: 18,
                 }}
               >
                 <img
                   src={`${BASE}/big_pencil.png`}
                   alt=""
                   style={{
-                    width: 108,
-                    height: 108,
+                    width: 128,
+                    height: 128,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 10px rgba(0,0,0,0.22))",
                   }}
@@ -227,12 +227,12 @@ export default function G1LengthMode({ onLearn, onQuiz, onHome }: Props) {
                   style={{
                     background: "white",
                     borderRadius: "50%",
-                    width: 36,
-                    height: 36,
+                    width: 42,
+                    height: 42,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: 900,
                     color: "#888",
                     flexShrink: 0,
@@ -244,8 +244,8 @@ export default function G1LengthMode({ onLearn, onQuiz, onHome }: Props) {
                   src={`${BASE}/small_pencil.png`}
                   alt=""
                   style={{
-                    width: 58,
-                    height: 58,
+                    width: 72,
+                    height: 72,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 10px rgba(0,0,0,0.2))",
                   }}

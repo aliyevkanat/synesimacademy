@@ -188,7 +188,7 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
             >
               <div
                 style={{
-                  fontSize: 28,
+                  fontSize: 30,
                   fontWeight: 900,
                   color: "#4E342E",
                   textShadow: "1px 1px 0px rgba(255,255,255,0.5)",
@@ -210,8 +210,8 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   src="/assets/big_small_images/rabbit.png"
                   alt="big rabbit"
                   style={{
-                    width: 100,
-                    height: 100,
+                    width: 118,
+                    height: 118,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 8px rgba(0,0,0,0.2))",
                   }}
@@ -220,12 +220,12 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   style={{
                     background: "white",
                     borderRadius: "50%",
-                    width: 36,
-                    height: 36,
+                    width: 40,
+                    height: 40,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: 900,
                     color: "#888",
                     flexShrink: 0,
@@ -237,8 +237,8 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   src="/assets/big_small_images/rabbit.png"
                   alt="small rabbit"
                   style={{
-                    width: 55,
-                    height: 55,
+                    width: 64,
+                    height: 64,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 8px rgba(0,0,0,0.2))",
                   }}
@@ -315,7 +315,7 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
             >
               <div
                 style={{
-                  fontSize: 28,
+                  fontSize: 30,
                   fontWeight: 900,
                   color: "#1B5E20",
                   textShadow: "1px 1px 0px rgba(255,255,255,0.5)",
@@ -338,8 +338,8 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   src="/assets/big_small_images/watermelon.png"
                   alt="watermelon"
                   style={{
-                    width: 90,
-                    height: 90,
+                    width: 104,
+                    height: 104,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 8px rgba(0,0,0,0.2))",
                   }}
@@ -348,12 +348,12 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   style={{
                     background: "white",
                     borderRadius: "50%",
-                    width: 36,
-                    height: 36,
+                    width: 40,
+                    height: 40,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: 900,
                     color: "#888",
                     flexShrink: 0,
@@ -365,8 +365,8 @@ export default function G1SizeMode({ onLearn, onQuiz, onHome }: Props) {
                   src="/assets/big_small_images/spoon.png"
                   alt="spoon"
                   style={{
-                    width: 70,
-                    height: 70,
+                    width: 80,
+                    height: 80,
                     objectFit: "contain",
                     filter: "drop-shadow(2px 4px 8px rgba(0,0,0,0.2))",
                   }}

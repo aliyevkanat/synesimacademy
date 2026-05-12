@@ -36,6 +36,8 @@ interface Cat1Card {
   border: string;
   shadow: string;
   previewMaxHeight: number;
+  /** Optional taller preview panel (px) for cards with richer artwork */
+  previewPanelMinHeight?: number;
   ctaGradient: string;
   ctaShadow: string;
 }
@@ -51,7 +53,7 @@ const CARDS: Cat1Card[] = [
     panelBorder: "rgba(255,255,255,0.55)",
     border: "3px solid rgba(255,255,255,0.6)",
     shadow: "0 14px 28px rgba(214, 84, 85, 0.28)",
-    previewMaxHeight: 150,
+    previewMaxHeight: 130,
     ctaGradient: "linear-gradient(135deg, #e91e63, #ff7043)",
     ctaShadow: "0 6px 16px rgba(233, 30, 99, 0.35)",
   },
@@ -65,7 +67,8 @@ const CARDS: Cat1Card[] = [
     panelBorder: "rgba(255,255,255,0.55)",
     border: "3px solid rgba(255,255,255,0.6)",
     shadow: "0 14px 28px rgba(25, 118, 210, 0.28)",
-    previewMaxHeight: 150,
+    previewMaxHeight: 156,
+    previewPanelMinHeight: 122,
     ctaGradient: "linear-gradient(135deg, #0288d1, #26c6da)",
     ctaShadow: "0 6px 16px rgba(2, 136, 209, 0.35)",
   },
@@ -79,7 +82,7 @@ const CARDS: Cat1Card[] = [
     panelBorder: "rgba(255,255,255,0.6)",
     border: "3px solid rgba(255,255,255,0.6)",
     shadow: "0 14px 28px rgba(255, 152, 0, 0.28)",
-    previewMaxHeight: 150,
+    previewMaxHeight: 130,
     ctaGradient: "linear-gradient(135deg, #f57c00, #fbc02d)",
     ctaShadow: "0 6px 16px rgba(245, 124, 0, 0.35)",
   },
@@ -93,7 +96,7 @@ const CARDS: Cat1Card[] = [
     panelBorder: "rgba(255,255,255,0.52)",
     border: "3px solid rgba(255,255,255,0.55)",
     shadow: "0 14px 28px rgba(110, 73, 176, 0.28)",
-    previewMaxHeight: 150,
+    previewMaxHeight: 130,
     ctaGradient: "linear-gradient(135deg, #7e57c2, #ec407a)",
     ctaShadow: "0 6px 16px rgba(126, 87, 194, 0.35)",
   },
@@ -205,7 +208,7 @@ export default function Cat1CategoryMenu({ title, onSelect, onHome }: Cat1Catego
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          padding: "72px 20px 56px",
+          padding: "56px 20px 56px",
         }}
       >
         <motion.div
@@ -213,7 +216,7 @@ export default function Cat1CategoryMenu({ title, onSelect, onHome }: Cat1Catego
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 18 }}
           style={{
-            marginBottom: 24,
+            marginBottom: 20,
             padding: "14px 36px",
             borderRadius: 28,
             background: "rgba(255,255,255,0.38)",
@@ -293,7 +296,7 @@ export default function Cat1CategoryMenu({ title, onSelect, onHome }: Cat1Catego
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    minHeight: 116,
+                    minHeight: card.previewPanelMinHeight ?? 102,
                   }}
                 >
                   <img

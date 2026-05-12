@@ -69,7 +69,7 @@ export default function G1LearnColors({ onSelectColor, onBack }: G1LearnColorsPr
         </div>
       </div>
 
-      <div className="mt-10 w-full max-w-3xl grid grid-cols-5 gap-6 justify-items-center">
+      <div className="mt-10 w-full max-w-5xl grid grid-cols-5 gap-x-12 gap-y-14 justify-items-center">
         {COLORS.map((c) => (
           <motion.button
             key={c.id}

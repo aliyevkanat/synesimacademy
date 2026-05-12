@@ -130,6 +130,7 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
           style={{
             display: "flex",
             justifyContent: "center",
+            alignItems: "stretch",
             flexWrap: "wrap",
             gap: 32,
             width: "100%",
@@ -148,6 +149,7 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
             }}
             style={{
               width: "clamp(280px, 35vw, 380px)",
+              minHeight: "clamp(440px, 52vh, 520px)",
               borderRadius: 28,
               overflow: "hidden",
               cursor: "pointer",
@@ -156,14 +158,25 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
               textAlign: "left",
               boxShadow: "0 10px 40px rgba(255,143,0,0.4)",
               background: "linear-gradient(145deg, #FFE082 0%, #FFB300 45%, #FF8F00 100%)",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <div style={{ padding: "24px 22px 18px" }}>
+            <div
+              style={{
+                padding: "24px 22px 16px",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                minHeight: 0,
+              }}
+            >
               <div style={{ fontSize: 30, fontWeight: 900, color: "#4E342E", textAlign: "center" }}>
                 Ауыр-Жеңіл
               </div>
               <div
                 style={{
+                  flex: 1,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -173,6 +186,7 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
                   borderRadius: 18,
                   padding: 14,
                   marginTop: 14,
+                  minHeight: 132,
                 }}
               >
                 <img src="/assets/heavy_light_images/watermelon_heavy.png" alt="" style={{ width: 90, height: 90, objectFit: "contain" }} />
@@ -196,14 +210,23 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
                 <img src="/assets/heavy_light_images/key_light.png" alt="" style={{ width: 90, height: 90, objectFit: "contain" }} />
               </div>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.92)", padding: "18px 18px 20px", textAlign: "center" }}>
-              <div style={{ color: "#4E342E", fontWeight: 800, marginBottom: 12, fontSize: 15 }}>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.92)",
+                padding: "14px 18px 22px",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                flexShrink: 0,
+              }}
+            >
+              <div style={{ color: "#4E342E", fontWeight: 800, marginBottom: 10, fontSize: 15 }}>
                 Ауыр және жеңіл заттарды үйреніп көр!
               </div>
               <div
                 style={{
                   width: "80%",
-                  margin: "0 auto",
+                  margin: "18px auto 0",
                   borderRadius: 999,
                   padding: "12px 0",
                   color: "#fff",
@@ -231,6 +254,7 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
             }}
             style={{
               width: "clamp(280px, 35vw, 380px)",
+              minHeight: "clamp(440px, 52vh, 520px)",
               borderRadius: 28,
               overflow: "hidden",
               cursor: "pointer",
@@ -239,14 +263,25 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
               textAlign: "left",
               boxShadow: "0 10px 40px rgba(106,27,154,0.4)",
               background: "linear-gradient(145deg, #CE93D8 0%, #AB47BC 45%, #7B1FA2 100%)",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <div style={{ padding: "24px 22px 18px" }}>
+            <div
+              style={{
+                padding: "24px 22px 16px",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                minHeight: 0,
+              }}
+            >
               <div style={{ fontSize: 30, fontWeight: 900, color: "white", textAlign: "center" }}>
                 Біліміңді тексеріп көр
               </div>
               <div
                 style={{
+                  flex: 1,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -255,14 +290,14 @@ export default function G2WeightMode({ onLearn, onQuiz, onHome }: Props) {
                   borderRadius: 18,
                   padding: 14,
                   marginTop: 14,
-                  minHeight: 122,
+                  minHeight: 132,
                   fontSize: 80,
                 }}
               >
                 ⚖️
               </div>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.92)", padding: "18px 18px 20px", textAlign: "center" }}>
+            <div style={{ background: "rgba(255,255,255,0.92)", padding: "14px 18px 22px", textAlign: "center" }}>
               <div style={{ color: "#4E342E", fontWeight: 800, marginBottom: 12, fontSize: 15 }}>
                 Дұрыс жауапты таңдап көр
               </div>

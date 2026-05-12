@@ -126,8 +126,8 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
               background: "rgba(255,255,255,0.92)",
               borderRadius: 24,
               border: selectedId ? "3px dashed #e53935" : "3px solid rgba(229,57,53,0.3)",
-              padding: "20px 16px",
-              minHeight: 340,
+              padding: "16px 12px",
+              minHeight: 280,
               cursor: selectedId ? "pointer" : "default",
               display: "flex",
               flexDirection: "column",
@@ -137,16 +137,16 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
             <img
               src="/assets/hot_cold_images/red_temp.png"
               alt="hot"
-              style={{ width: 64, height: 96, objectFit: "contain" }}
+              style={{ width: 52, height: 78, objectFit: "contain" }}
             />
-            <div style={{ fontWeight: 900, color: "#e53935", fontSize: 26, marginTop: 8, marginBottom: 16 }}>
+            <div style={{ fontWeight: 900, color: "#e53935", fontSize: 22, marginTop: 6, marginBottom: 12 }}>
               ЫСТЫҚ 🔥
             </div>
             <div
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 10,
+                gap: 8,
                 justifyContent: "center",
                 width: "100%",
               }}
@@ -158,9 +158,9 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   style={{
-                    width: 76,
-                    height: 76,
-                    borderRadius: 16,
+                    width: 62,
+                    height: 62,
+                    borderRadius: 14,
                     background: "rgba(255,205,210,0.5)",
                     display: "flex",
                     alignItems: "center",
@@ -170,7 +170,7 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
                   <img
                     src={`/assets/hot_cold_images/${item.file}`}
                     alt={item.label}
-                    style={{ width: 56, height: 56, objectFit: "contain" }}
+                    style={{ width: 44, height: 44, objectFit: "contain" }}
                   />
                 </motion.div>
               ))}
@@ -187,8 +187,8 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
               background: "rgba(255,255,255,0.92)",
               borderRadius: 24,
               border: selectedId ? "3px dashed #1565c0" : "3px solid rgba(21,101,192,0.3)",
-              padding: "20px 16px",
-              minHeight: 340,
+              padding: "16px 12px",
+              minHeight: 280,
               cursor: selectedId ? "pointer" : "default",
               display: "flex",
               flexDirection: "column",
@@ -198,16 +198,16 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
             <img
               src="/assets/hot_cold_images/blue_temp.png"
               alt="cold"
-              style={{ width: 64, height: 96, objectFit: "contain" }}
+              style={{ width: 52, height: 78, objectFit: "contain" }}
             />
-            <div style={{ fontWeight: 900, color: "#1565c0", fontSize: 26, marginTop: 8, marginBottom: 16 }}>
+            <div style={{ fontWeight: 900, color: "#1565c0", fontSize: 22, marginTop: 6, marginBottom: 12 }}>
               СУЫҚ ❄️
             </div>
             <div
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 10,
+                gap: 8,
                 justifyContent: "center",
                 width: "100%",
               }}
@@ -219,9 +219,9 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   style={{
-                    width: 76,
-                    height: 76,
-                    borderRadius: 16,
+                    width: 62,
+                    height: 62,
+                    borderRadius: 14,
                     background: "rgba(187,222,251,0.5)",
                     display: "flex",
                     alignItems: "center",
@@ -231,7 +231,7 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
                   <img
                     src={`/assets/hot_cold_images/${item.file}`}
                     alt={item.label}
-                    style={{ width: 56, height: 56, objectFit: "contain" }}
+                    style={{ width: 44, height: 44, objectFit: "contain" }}
                   />
                 </motion.div>
               ))}
@@ -274,25 +274,26 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
           style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: 14,
+            gap: 10,
             justifyContent: "center",
             maxWidth: 1100,
             width: "100%",
+            padding: "0 4px",
           }}
         >
           {remaining.map((item) => (
             <motion.div
               key={item.id}
               onClick={() => handleItemClick(item.id)}
-              whileHover={{ scale: 1.08, y: -2 }}
+              whileHover={{ scale: 1.06, y: -2 }}
               whileTap={{ scale: 0.92 }}
               style={{
-                width: 150,
-                height: 150,
+                width: "clamp(96px, 22vw, 118px)",
+                height: "clamp(96px, 22vw, 118px)",
                 background: selectedId === item.id
                   ? "rgba(255,255,255,1)"
                   : "rgba(255,255,255,0.85)",
-                borderRadius: 22,
+                borderRadius: 18,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -304,15 +305,15 @@ export default function G2TempQuiz({ onBack, onHome, onReplay }: Props) {
                 boxShadow: selectedId === item.id
                   ? "0 6px 20px rgba(255,160,0,0.5)"
                   : "0 3px 12px rgba(0,0,0,0.15)",
-                padding: "8px",
+                padding: "6px",
               }}
             >
               <img
                 src={`/assets/hot_cold_images/${item.file}`}
                 alt={item.label}
                 style={{
-                  width: 120,
-                  height: 120,
+                  width: "min(88%, 92px)",
+                  height: "min(88%, 92px)",
                   objectFit: "contain",
                   mixBlendMode: "multiply",
                 }}

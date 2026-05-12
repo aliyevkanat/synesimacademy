@@ -11,7 +11,7 @@ export default function HomeButton({ onHome, className }: HomeButtonProps) {
   return (
     <TransparentBackButton
       ariaLabel="Артқа"
-      className={clsx("fixed top-4 left-4", className)}
+      className={clsx("fixed top-4 left-4 z-50", className)}
       onClick={() => {
         playSound("button_click.mp3");
         onHome();

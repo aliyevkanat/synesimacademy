@@ -102,7 +102,7 @@ export default function G2TempMode({ onLearn, onQuiz, onHome }: Props) {
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                gap: 8,
+                gap: 6,
               }}
             >
               {["cup.png", "ice_cream.png", "fire.png", "snow.png"].map((img) => (
@@ -111,8 +111,8 @@ export default function G2TempMode({ onLearn, onQuiz, onHome }: Props) {
                   src={`/assets/hot_cold_images/${img}`}
                   alt={img}
                   style={{
-                    width: 50,
-                    height: 50,
+                    width: 38,
+                    height: 38,
                     objectFit: "contain",
                     mixBlendMode: "multiply",
                   }}
